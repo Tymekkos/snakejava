@@ -9,12 +9,14 @@ import java.awt.event.KeyEvent;
 public class MainPanel extends JPanel {
 
     private Snake snake = new Snake();
+    private boolean gameOver = false;
 
     public MainPanel(){
         setPreferredSize(new Dimension(Board.MAX_X, Board.MAX_Y));
         MainTimer timer = new MainTimer();
         timer.start();
 
+        MainFrame.score.setText("Score: " + snake.getSize());
         setFocusable(true);
         addKeyListener(new MyKeyAdapter());
     }
@@ -30,8 +32,14 @@ public class MainPanel extends JPanel {
 
         public MainTimer(){
             super(DELAY, e -> {
-                snake.move();
-                repaint();
+                if(!gameOver){
+                    snake.move();
+                    if(snake.isCollision()){
+                        gameOver = true;
+                        MainFrame.score.setText("Game Over - Score: " + snake.getSize());
+                    }
+                    repaint();
+                }
             });
         }
     }
