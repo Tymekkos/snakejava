@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 public class MainPanel extends JPanel {
 
     private Snake snake = new Snake();
+    private Apple apple = new Apple();
     private boolean gameOver = false;
 
     public MainPanel(){
@@ -25,15 +26,19 @@ public class MainPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         Board.draw(g);
         snake.draw(g);
+        apple.draw(g);
     }
 
     private class MainTimer extends Timer{
-        public static final int DELAY = 150;
+        public static final int DELAY = 90;
 
         public MainTimer(){
             super(DELAY, e -> {
                 if(!gameOver){
                     snake.move();
+                    if(snake.eatApple(apple)){
+                        apple = new Apple();
+                    }
                     if(snake.isCollision()){
                         gameOver = true;
                         MainFrame.score.setText("Game Over - Score: " + snake.getSize());

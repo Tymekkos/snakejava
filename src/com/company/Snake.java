@@ -8,10 +8,12 @@ public class Snake {
 
     private List<Point> body;
     private Direction direction;
+    private Point ending;
 
     public Snake() {
         direction = Direction.D;
         body = new ArrayList<>();
+        ending = new Point();
 
         body.add(new Point(2,5));
         body.add(new Point(2,4));
@@ -37,6 +39,7 @@ public class Snake {
     }
 
     public void move() {
+        ending.setLocation(body.get(body.size()-1));
         for (int i = body.size()-1; i>0; i--) {
             body.get(i).setLocation(body.get(i-1));
         }
@@ -72,5 +75,14 @@ public class Snake {
 
     public int getSize(){
         return body.size();
+    }
+
+    public boolean eatApple(Apple apple) {
+        if(getHead().equals(apple)){
+            body.add(new Point(ending));
+            MainFrame.score.setText("Score: " + body.size());
+            return true;
+        }
+        return false;
     }
 }
